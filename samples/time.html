@@ -12,19 +12,107 @@
         <script type="text/javascript" src="https://unpkg.com/chart.js@2.8.0/dist/Chart.bundle.min.js"></script>
         <script type="text/javascript" src="../dist/chartjs-plugin-gantt.js"></script>
         <script type="text/javascript">
-            function incHour(date, delta) {
-                if (delta === undefined)
-                    delta = 1;
-                date.setHours(date.getHours() + delta);
-                return new Date(date);
+            function incDate(_date, _day, _hours, _minutes) {
+                var res = new Date(_date);
+
+                if (_day)
+                    res.setDate(_date.getDate() + _day);
+
+                if (_hours)
+                    res.setHours(_date.getHours() + _hours);
+
+                if (_minutes)
+                    res.setMinutes(_date.getMinutes() + _minutes);
+
+                return res;
             }
 
-            const curDate = new Date(2019, 3, 15, 12, 0, 0);
+            function rangeDate(_date) {
+                return {from: incDate(_date, 0, 0), to: incDate(_date, 0, 4)};
+            }
+
+            function dateString(_date) {
+                return _date.toLocaleDateString();
+            }
+
+            const timezoneOffset = new Date().getTimezoneOffset();
+            const curdate = new Date(2019, 3, 15, 0, 0, 0);
+            const ranges = [
+                rangeDate(incDate(curdate, 0)),
+                rangeDate(incDate(curdate, 1)),
+                rangeDate(incDate(curdate, 2)),
+                rangeDate(incDate(curdate, 3)),
+                rangeDate(incDate(curdate, 4)),
+                rangeDate(incDate(curdate, 5)),
+                rangeDate(incDate(curdate, 6)),
+            ];
+
+            var colors = {
+                error: 'rgba(255, 0, 0, 0.8)',
+                success: 'rgba(50, 200, 50, 0.8)',
+            };
+
+            const data = [
+                {x: ranges[0], y: {from: 0, to: 1}, backgroundColor: colors.success},
+                {x: ranges[0], y: {from: 1, to: 2}, backgroundColor: colors.success},
+                {x: ranges[0], y: {from: 2, to: 3}, backgroundColor: colors.error},
+                {x: ranges[0], y: {from: 3, to: 4}, backgroundColor: colors.success},
+                {x: ranges[0], y: {from: 4, to: 5}, backgroundColor: colors.success},
+                {x: ranges[0], y: {from: 5, to: 6}, backgroundColor: colors.error},
+                {x: ranges[0], y: {from: 6, to: 7}, backgroundColor: colors.success},
+                {x: ranges[1], y: {from: 0, to: 1}, backgroundColor: colors.success},
+                {x: ranges[1], y: {from: 1, to: 2}, backgroundColor: colors.error},
+                {x: ranges[1], y: {from: 2, to: 3}, backgroundColor: colors.success},
+                {x: ranges[1], y: {from: 3, to: 4}, backgroundColor: colors.success},
+                {x: ranges[1], y: {from: 4, to: 5}, backgroundColor: colors.error},
+                {x: ranges[1], y: {from: 5, to: 6}, backgroundColor: colors.success},
+                {x: ranges[1], y: {from: 6, to: 7}, backgroundColor: colors.success},
+                {x: ranges[1], y: {from: 7, to: 8}, backgroundColor: colors.error},
+                {x: ranges[2], y: {from: 0, to: 1}, backgroundColor: colors.success},
+                {x: ranges[2], y: {from: 1, to: 2}, backgroundColor: colors.success},
+                {x: ranges[2], y: {from: 2, to: 3}, backgroundColor: colors.success},
+                {x: ranges[2], y: {from: 3, to: 4}, backgroundColor: colors.error},
+                {x: ranges[2], y: {from: 4, to: 5}, backgroundColor: colors.success},
+                {x: ranges[3], y: {from: 0, to: 1}, backgroundColor: colors.error},
+                {x: ranges[3], y: {from: 1, to: 2}, backgroundColor: colors.error},
+                {x: ranges[3], y: {from: 2, to: 3}, backgroundColor: colors.success},
+                {x: ranges[3], y: {from: 3, to: 4}, backgroundColor: colors.error},
+                {x: ranges[3], y: {from: 4, to: 5}, backgroundColor: colors.success},
+                {x: ranges[3], y: {from: 5, to: 6}, backgroundColor: colors.success},
+                {x: ranges[3], y: {from: 6, to: 7}, backgroundColor: colors.success},
+                {x: ranges[3], y: {from: 7, to: 8}, backgroundColor: colors.error},
+                {x: ranges[4], y: {from: 0, to: 1}, backgroundColor: colors.error},
+                {x: ranges[4], y: {from: 1, to: 2}, backgroundColor: colors.error},
+                {x: ranges[4], y: {from: 2, to: 3}, backgroundColor: colors.success},
+                {x: ranges[4], y: {from: 3, to: 4}, backgroundColor: colors.error},
+                {x: ranges[4], y: {from: 4, to: 5}, backgroundColor: colors.success},
+                {x: ranges[4], y: {from: 5, to: 6}, backgroundColor: colors.success},
+                {x: ranges[4], y: {from: 6, to: 7}, backgroundColor: colors.success},
+                {x: ranges[4], y: {from: 7, to: 8}, backgroundColor: colors.error},
+                {x: ranges[5], y: {from: 0, to: 1}, backgroundColor: colors.error},
+                {x: ranges[5], y: {from: 1, to: 2}, backgroundColor: colors.error},
+                {x: ranges[5], y: {from: 2, to: 3}, backgroundColor: colors.success},
+                {x: ranges[5], y: {from: 3, to: 4}, backgroundColor: colors.error},
+                {x: ranges[5], y: {from: 4, to: 5}, backgroundColor: colors.success},
+                {x: ranges[5], y: {from: 5, to: 6}, backgroundColor: colors.success},
+                {x: ranges[5], y: {from: 6, to: 7}, backgroundColor: colors.error},
+                {x: ranges[5], y: {from: 7, to: 8}, backgroundColor: colors.error},
+                {x: ranges[6], y: {from: 0, to: 1}, backgroundColor: colors.success},
+                {x: ranges[6], y: {from: 1, to: 2}, backgroundColor: colors.error},
+                {x: ranges[6], y: {from: 2, to: 3}, backgroundColor: colors.success},
+                {x: ranges[6], y: {from: 3, to: 4}, backgroundColor: colors.error},
+                {x: ranges[6], y: {from: 4, to: 5}, backgroundColor: colors.success},
+                {x: ranges[6], y: {from: 5, to: 6}, backgroundColor: colors.success},
+                {x: ranges[6], y: {from: 6, to: 7}, backgroundColor: colors.success},
+                {x: ranges[6], y: {from: 7, to: 8}, backgroundColor: colors.error},
+                {x: ranges[6], y: {from: 8, to: 9}, backgroundColor: colors.error},
+            ];
+
             const chart = new Chart("chart", {
                 type: "gantt",
                 data: {
                     datasets: [{
-                        height: 2,  // default 5
+                        height: 1,  // default 5
                         /*
                          format for time scale:
                            string "xd yh zm ps qms",
@@ -38,32 +126,38 @@
                            ms: number of milliseconds.
                          if the field is missing, then then is considered to be zero
                          */
-                        width: "2h",
-                        label: "Time gantt",
-                        data: [
-                            {x: incHour(curDate, 0), y: 0},
-                            {x: {from: incHour(curDate), to: incHour(curDate, 3)}, y: 3},
-                        ]
-                    }]
+                        width: "1d",
+                        data: data,
+                        label: 'Sample timeline',
+                    }],
                 },
                 options: {
                     scales: {
                         xAxes: [{
-                            type: "time-gantt",
                             position: "bottom",
+                            type: "time-gantt",
                             time: {
                                 displayFormats: {
-                                    millisecond: "HH:mm:ss",
-                                    second: "HH:mm:ss",
-                                    minute: "HH:mm:ss",
-                                    hour: "HH:mm:ss",
-                                    day: "HH:mm:ss",
+                                    hour: "DD MMM YYYY",
                                 },
+                            },
+                            minVal: incDate(curdate, -1, 16),
+                            maxVal: incDate(curdate, 7, -12),
+                        }],
+                        yAxes: [{
+                            maxVal: 11,
+                        }],
+                    },
+                    tooltips: {
+                        callbacks: {
+                          label: function(_label, _data) {
+                              var data = _data.datasets[_label.datasetIndex].data[_label.index];
 
-                            }
-                        }]
-                    }
-                }
+                              return dateString(data.x.from);
+                          },
+                        },
+                    },
+                },
             });
         </script>
     </body>

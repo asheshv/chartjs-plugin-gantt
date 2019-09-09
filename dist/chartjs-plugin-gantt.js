@@ -345,6 +345,8 @@ const ScaleUtils = {
 
     scale.min = null;
     scale.max = null;
+    if (scale.options && scale.options.minVal) scale.min = scale.options.minVal;
+    if (scale.options && scale.options.maxVal) scale.max = scale.options.maxVal;
     helpers.each(chart.data.datasets, function (dataset, datasetIndex) {
       const meta = chart.getDatasetMeta(datasetIndex);
 
