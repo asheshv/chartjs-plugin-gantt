@@ -34,10 +34,13 @@ export const Rect = Chart.Element.extend({
         ctx.lineWidth = vm.borderWidth;
         ctx.strokeStyle = vm.borderColor;
         ctx.fillStyle = vm.backgroundColor;
-        
-        const rect = vm.rect;
+
+        const rect = vm.rect,
+            displacement = vm.borderWidth / 2,
+            doubleDisplacement = displacement * 2;
+
         ctx.fillRect(rect.x.from, rect.y.from, rect.x.size, rect.y.size);
-        ctx.strokeRect(rect.x.from, rect.y.from, rect.x.size, rect.y.size);
+        ctx.strokeRect(rect.x.from + displacement, rect.y.from + displacement, rect.x.size - doubleDisplacement, rect.y.size - doubleDisplacement);
 
         ctx.restore();
     }
