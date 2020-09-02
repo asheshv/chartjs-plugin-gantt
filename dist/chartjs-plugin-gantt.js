@@ -9,7 +9,8 @@
  */
 
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-"use strict";
+(function (global){
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -20,7 +21,9 @@ var _rect = require("../elements/rect");
 
 var _utils = require("../core/utils");
 
-const defaults = Chart.defaults;
+var _chart = (typeof window !== "undefined" ? window['Chart'] : typeof global !== "undefined" ? global['Chart'] : null);
+
+const defaults = _chart.Chart.defaults;
 defaults.gantt = {
   height: 5,
   width: 5,
@@ -75,7 +78,7 @@ function GanttController(Chart) {
       res.size = res.to - res.from;
       return res;
     },
-    update: function (reset) {
+    update: function () {
       const meta = this.getMeta();
       const dataset = this.getDataset();
       const xScale = this.getScaleForId(meta.xAxisID);
@@ -90,9 +93,9 @@ function GanttController(Chart) {
       };
       const data = meta.data || [];
 
-      for (let i = 0; i < data.length; i++) this.updateElement(data[i], i, reset);
+      for (let i = 0; i < data.length; i++) this.updateElement(data[i], i);
     },
-    updateElement: function (point, index, reset) {
+    updateElement: function (point, index) {
       const meta = this.getMeta();
       const dataset = this.getDataset();
       const datasetIndex = this.index;
@@ -124,8 +127,9 @@ function GanttController(Chart) {
   });
 }
 
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"../core/utils":2,"../elements/rect":3}],2:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -133,11 +137,11 @@ Object.defineProperty(exports, "__esModule", {
 exports.Utils = void 0;
 const Utils = {
   _parseInterval: function (value) {
-    if (typeof value === "number") return value;
+    if (typeof value === 'number') return value;
 
-    if (typeof value === "string") {
+    if (typeof value === 'string') {
       const parsed = value.trim().toLowerCase().split(/\s*(\d+)\s*/);
-      let cur = "ms";
+      let cur = 'ms';
       const obj = {};
 
       for (let i = parsed.length - 1; i > 0; i--) {
@@ -164,12 +168,12 @@ const Utils = {
     return res;
   },
   isRange: function (value) {
-    return typeof value.from !== "undefined" && typeof value.to !== "undefined";
+    return typeof value.from !== 'undefined' && typeof value.to !== 'undefined';
   },
   getValue: function (rawValue, scale) {
     if (typeof rawValue === 'string') return +rawValue; // Null and undefined values first
 
-    if (typeof rawValue === "undefined" || rawValue === null) return NaN; // isNaN(object) returns true, so make sure NaN is checking for a number; Discard Infinite values
+    if (typeof rawValue === 'undefined' || rawValue === null) return NaN; // isNaN(object) returns true, so make sure NaN is checking for a number; Discard Infinite values
 
     if (typeof rawValue === 'number' && !isFinite(rawValue)) {
       return NaN;
@@ -207,7 +211,7 @@ const Utils = {
     };
   },
   isTimeScale: function (scale) {
-    return scale.isTime || scale.type === "time";
+    return scale.isTime || scale.type === 'time';
   },
   convertSize: function (scale, size) {
     return this.isTimeScale(scale) ? this._parseInterval(size) : size;
@@ -229,7 +233,7 @@ exports.Utils = Utils;
 
 },{}],3:[function(require,module,exports){
 (function (global){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -237,8 +241,6 @@ Object.defineProperty(exports, "__esModule", {
 exports.Rect = void 0;
 
 var _chart = (typeof window !== "undefined" ? window['Chart'] : typeof global !== "undefined" ? global['Chart'] : null);
-
-var _utils = require("../core/utils");
 
 const Rect = _chart.Chart.Element.extend({
   inRange: function (mouseX, mouseY) {
@@ -275,9 +277,9 @@ const Rect = _chart.Chart.Element.extend({
 exports.Rect = Rect;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../core/utils":2}],4:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 (function (global){
-"use strict";
+'use strict';
 
 var _chart = (typeof window !== "undefined" ? window['Chart'] : typeof global !== "undefined" ? global['Chart'] : null);
 
@@ -321,6 +323,7 @@ function LinearGanttScale(Chart) {
 }
 
 },{"./scale-utils":6}],6:[function(require,module,exports){
+(function (global){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -330,7 +333,9 @@ exports.ScaleUtils = void 0;
 
 var _utils = require("../core/utils");
 
-const helpers = Chart.helpers;
+var _chart = (typeof window !== "undefined" ? window['Chart'] : typeof global !== "undefined" ? global['Chart'] : null);
+
+const helpers = _chart.Chart.helpers;
 const ScaleUtils = {
   getRightValue: function (scale, rawValue) {
     if (_utils.Utils.isRange(rawValue)) return _utils.Utils.getMiddle(rawValue);
@@ -338,7 +343,7 @@ const ScaleUtils = {
   },
   determineDataLimits: function (scale) {
     const chart = scale.chart;
-    const defaults = Chart.defaults.gantt;
+    const defaults = _chart.Chart.defaults.gantt;
     const isHorizontal = scale.isHorizontal();
 
     function IDMatches(meta) {
@@ -361,7 +366,7 @@ const ScaleUtils = {
 
           const value = _utils.Utils.extendValue(_utils.Utils.getValue(rawValue, scale), size);
 
-          if (typeof value !== "object" && isNaN(value)) return;
+          if (typeof value !== 'object' && isNaN(value)) return;
 
           _utils.Utils.normalize(value);
 
@@ -374,7 +379,7 @@ const ScaleUtils = {
   getLabelForIndex: function (scale, index, datasetIndex) {
     const data = scale.chart.data.datasets[datasetIndex].data[index];
     const val = scale.isHorizontal() ? data.x : data.y;
-    if (_utils.Utils.isRange(val)) return val.from + "~" + val.to;
+    if (_utils.Utils.isRange(val)) return val.from + '~' + val.to;
     return val;
   },
   extendScale: function (Chart, base, newName, scaleClass) {
@@ -385,6 +390,7 @@ const ScaleUtils = {
 };
 exports.ScaleUtils = ScaleUtils;
 
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"../core/utils":2}],7:[function(require,module,exports){
 'use strict';
 

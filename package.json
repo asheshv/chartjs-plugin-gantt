@@ -40,7 +40,8 @@
     "gulp-header": "^2.0.7",
     "gulp-streamify": "^1.0.2",
     "gulp-uglify-es": "^1.0.4",
-    "vinyl-source-stream": "^2.0.0"
+    "vinyl-source-stream": "^2.0.0",
+    "eslint": "^5.16.0"
   },
   "dependencies": {
     "chart.js": "^2.8.0"
